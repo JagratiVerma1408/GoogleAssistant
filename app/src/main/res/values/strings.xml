@@ -4,6 +4,10 @@
     <string name="todo">TODO</string>
     <string name="first_message">"Hello , How may i help you"</string>
     <string name="secound_message">"Can you tell me something?"</string>
-    <string name="OPEN_WEATHER_MAP_API_KEY">aaa9216a68c066598b8d312111385fbd</string>
-    <string name="API">8355700f0997469f9b3e45dc433ce9ad</string>
+    <string name="OPEN_WEATHER_MAP_API_KEY">3c53cb76008cb3f3c8d843cc2b163bfe</string>
+    <string name="image">Image</string>
+    <string name="text_from_image">Text From Image</string>
+    <string name="search">Search</string>
+    <string name="text_will_appear_here">Text will appear here</string>
+    <string name="image_preview">image preview</string>
 </resources>

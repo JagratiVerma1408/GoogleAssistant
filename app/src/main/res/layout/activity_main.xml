@@ -19,9 +19,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/hiGoogle"
-        android:layout_height="wrap_content">
+        android:layout_height="50dp">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:gravity="start"
+        android:layout_height="50dp">
+        <ImageView
+            android:id="@+id/action_explore"
+            android:layout_width="50dp"
+            android:src="@drawable/explore"
+            android:layout_height="50dp"
+            android:contentDescription="@string/todo">
+        </ImageView>
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="50dp"
+            android:gravity="center"
+            android:layout_height="50dp">
         <ImageView
             android:id="@+id/action_button"
             android:layout_width="50dp"
@@ -29,5 +44,18 @@
             android:layout_height="50dp"
             android:contentDescription="@string/todo">
         </ImageView>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="50dp">
+        <ImageView
+            android:layout_gravity="end"
+            android:id="@+id/action_google_lens"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/googlelens">
+        </ImageView>
+    </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

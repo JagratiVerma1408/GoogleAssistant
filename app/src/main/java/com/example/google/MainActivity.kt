@@ -9,18 +9,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.google.assistant.AssistantActivity
+import com.example.google.functions.GoogleLensActivity
 import com.example.google.utils.UiUtils.setCustomActionBar
+import com.example.google.functions.ExploreActivity
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView
     private lateinit var  hiGoogle : ImageView
+    private lateinit var  googleLens : ImageView
+    private lateinit var  explore : ImageView
     private val Record_Audio_Request_Code:Int=1
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.activity_main)
             setCustomActionBar(supportActionBar, this)
             imageView = findViewById(R.id.action_button)
+           googleLens= findViewById(R.id.action_google_lens)
+            explore = findViewById(R.id.action_explore)
             hiGoogle= findViewById(R.id.hiGoogle)
             if (ContextCompat.checkSelfPermission(this,
                             android.Manifest.permission.RECORD_AUDIO) != PERMISSION_GRANTED) {
@@ -31,6 +37,12 @@ class MainActivity : AppCompatActivity() {
         }
             hiGoogle.setOnClickListener {
                 startActivity(Intent(this, AssistantActivity::class.java))
+            }
+            googleLens.setOnClickListener {
+                startActivity(Intent(this, GoogleLensActivity::class.java))
+            }
+            explore.setOnClickListener {
+                startActivity(Intent(this, ExploreActivity::class.java))
             }
     }
 
