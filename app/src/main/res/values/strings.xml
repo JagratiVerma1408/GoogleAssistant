@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Google</string>
+    <string name="google_assistant">Google Assistant</string>
+    <string name="todo">TODO</string>
+    <string name="first_message">"Hello , How may i help you"</string>
+    <string name="secound_message">"Can you tell me something?"</string>
+    <string name="OPEN_WEATHER_MAP_API_KEY">aaa9216a68c066598b8d312111385fbd</string>
+    <string name="API">8355700f0997469f9b3e45dc433ce9ad</string>
+</resources>
