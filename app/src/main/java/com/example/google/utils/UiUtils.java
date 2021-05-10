@@ -11,6 +11,11 @@ import com.example.google.R;
 
 
 public class UiUtils {
+        public static final String[] Commands = {"hey ","hi","hello","thanks","welcome","clear","date","time","dial","send SMS", "send sms", "joke", "tell me a joke"
+        ,"ask me fun questions", "open Whatsapp" , "open Facebook" , "open Gmail", "open Youtube" , "open  GoogleMaps" , "open Google",
+        "turn on Bluetooth" , "call mum",  "dial" , "turn off Bluetooth" , "turn on Flash" , "turn off Flash","capture photo" , "any thoughts",
+                "play ringtone","stop ringtone","are you married","haha","read me","read my last sms","share file","share a text message that your message",
+        "get bluetooth devices","copy to clipboard","read last clipboard"};
         //log for text to speech
         public static final String logTTS = "Text To Speech";
         //to see speech recognitions

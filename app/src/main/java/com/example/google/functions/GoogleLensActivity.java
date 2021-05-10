@@ -49,8 +49,8 @@ public class GoogleLensActivity extends AppCompatActivity {
     private static final int STORAGE_REQUEST_CODE=400;
     private static final int IMAGE_PICK_GALLERY_CODE=1000;
     private static final int IMAGE_PICK_CAMERA_CODE=1001;
-    String cameraPermission[];
-    String storagePermission[];
+    String[] cameraPermission;
+    String[] storagePermission;
     EditText mResultEt;
     ImageView mPreviewIv;
     Uri image_uri;
@@ -62,7 +62,7 @@ public class GoogleLensActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google_lens);
         ActionBar actionBar=getSupportActionBar();
-        actionBar.setSubtitle("Insert or Click image");
+        actionBar.setSubtitle("Insert or Click Photos");
         mResultEt=findViewById(R.id.resultedt);
         mPreviewIv=findViewById(R.id.ImageViewpre);
         b=findViewById(R.id.button);

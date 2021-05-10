@@ -16,14 +16,16 @@
         android:focusable="true"
         android:contentDescription="@string/todo">
     </ImageView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hiGoogle"
         android:layout_height="50dp">
     <LinearLayout
         android:layout_width="wrap_content"
-        android:gravity="start"
         android:layout_height="50dp">
         <ImageView
             android:id="@+id/action_explore"
@@ -33,9 +35,13 @@
             android:contentDescription="@string/todo">
         </ImageView>
     </LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="0dp">
+        </View>
         <LinearLayout
             android:layout_width="50dp"
-            android:gravity="center"
             android:layout_height="50dp">
         <ImageView
             android:id="@+id/action_button"
@@ -45,11 +51,15 @@
             android:contentDescription="@string/todo">
         </ImageView>
         </LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="0dp">
+        </View>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="50dp">
         <ImageView
-            android:layout_gravity="end"
             android:id="@+id/action_google_lens"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -58,4 +68,5 @@
         </ImageView>
     </LinearLayout>
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

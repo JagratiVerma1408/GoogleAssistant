@@ -475,36 +475,6 @@ class AssistantFunctions {
         }
 
 
-        fun weather(helper: OpenWeatherMapHelper, textToSpeech: TextToSpeech, assistantViewModel: AssistantViewModel, keeper: String) {
-
-            if (keeper.contains("Fahrenheit")) {
-                helper.setUnits(Units.IMPERIAL)
-            } else if (keeper.contains("Celsius")) {
-                helper.setUnits(Units.METRIC)
-            }
-
-        val keeperSplit = keeper.replace(" ".toRegex(), "").split("w")
-                .toTypedArray()
-        val city = keeperSplit[0]
-        helper.getCurrentWeatherByCityID(city,
-        object : CurrentWeatherCallback {
-            override fun onSuccess(currentWeather: CurrentWeather?) {
-                speak(""" Coordinates : ${currentWeather!!.coord.lat}
-                        , ${currentWeather.coord.lon}
-                        Weather Description : ${currentWeather.weather[0].description}
-                        Temperature : ${currentWeather.main.tempMax}
-                        Wind Speed : ${currentWeather.wind.speed}
-                        City : ${currentWeather.name} , ${currentWeather.sys.country}
-                        """.trimIndent(), textToSpeech, assistantViewModel, keeper)
-            }
-
-            override fun onFailure(throwable: Throwable?) {
-                speak("Error ${throwable!!.message}", textToSpeech, assistantViewModel, keeper)
-            }
-        })
-
-    }
-
 
         fun motivationalThoughts( textToSpeech: TextToSpeech, assistantViewModel: AssistantViewModel, keeper: String) {
 

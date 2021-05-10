@@ -13,4 +13,26 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+    <style name="chips">
+
+        <item name="android:textSize">
+            15sp
+        </item>
+
+        <item name="android:letterSpacing">
+            0.02
+        </item>
+
+        <item name="android:textColor">
+            #000
+        </item>
+        <item name="fontFamily">
+            @font/montserrat
+        </item>
+        <item name="backgroundTint">
+            #fff
+        </item>
+
+
+    </style>
 </resources>

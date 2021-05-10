@@ -3,8 +3,13 @@
     xmlns:andriod="http://schemas.android.com/apk/distribution"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.google">
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -53,9 +58,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Google"
         tools:node="replace">
-        <activity android:name=".functions.ExploreActivity"></activity>
-        <activity android:name=".functions.GoogleLensActivity"
-            android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"/>
+        <activity android:name=".assistant.ExploreActivity"></activity>
+        <activity
+            android:name=".functions.GoogleLensActivity"
+            android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar" />
         <activity android:name=".assistant.AssistantActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

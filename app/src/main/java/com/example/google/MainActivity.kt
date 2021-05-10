@@ -9,9 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.google.assistant.AssistantActivity
+import com.example.google.assistant.ExploreActivity
 import com.example.google.functions.GoogleLensActivity
 import com.example.google.utils.UiUtils.setCustomActionBar
-import com.example.google.functions.ExploreActivity
 
 
 class MainActivity : AppCompatActivity() {

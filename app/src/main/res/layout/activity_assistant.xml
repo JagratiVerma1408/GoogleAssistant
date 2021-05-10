@@ -19,23 +19,25 @@
       <androidx.recyclerview.widget.RecyclerView
           android:layout_marginTop="30dp"
           android:id="@+id/recylerView"
+          android:layout_weight="1"
           android:layout_width="match_parent"
-          android:layout_height="620dp"
+          android:layout_height="650dp"
           app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
       </androidx.recyclerview.widget.RecyclerView>
       <View
-          android:layout_width="15dp"
-          android:layout_height="15dp">
-
+          android:layout_width="0dp"
+          android:layout_weight="1"
+          android:layout_height="0dp">
       </View>
           <ImageView
-              android:layout_width="50dp"
+              android:layout_width="70dp"
+              android:layout_marginBottom="30dp"
               android:clickable="true"
               android:layout_gravity="center_horizontal"
               android:id="@+id/assistant_Action"
               android:src="@drawable/mic"
-              android:layout_height="50dp"
+              android:layout_height="70dp"
               android:focusable="true"
               android:contentDescription="@string/todo">
           </ImageView>

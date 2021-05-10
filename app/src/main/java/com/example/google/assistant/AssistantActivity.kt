@@ -1,13 +1,16 @@
 package com.example.google.assistant
 
+import android.Manifest
 import android.animation.Animator
 import android.annotation.SuppressLint
 import android.content.ClipboardManager
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.hardware.camera2.CameraManager
+import android.location.Location
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
@@ -27,8 +30,12 @@ import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.android.volley.Request
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.example.google.R
 import com.example.google.data.AssitantDatabase
 import com.example.google.databinding.ActivityAssistantBinding
@@ -73,11 +80,12 @@ import com.example.google.functions.AssistantFunctions.Companion.turnOffBluetoot
 import com.example.google.functions.AssistantFunctions.Companion.turnOffFlash
 import com.example.google.functions.AssistantFunctions.Companion.turnOnBluetooth
 import com.example.google.functions.AssistantFunctions.Companion.turnOnFlash
-import com.example.google.functions.AssistantFunctions.Companion.weather
+
 import com.example.google.utils.UiUtils.*
 import com.kwabenaberko.openweathermaplib.implementation.OpenWeatherMapHelper
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.*
@@ -105,7 +113,6 @@ class AssistantActivity : AppCompatActivity() {
         overridePendingTransition(R.anim.non_movable, R.anim.non_movable)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_assistant)
         setCustomActionBar(supportActionBar, this)
-        helper = OpenWeatherMapHelper(getString(R.string.OPEN_WEATHER_MAP_API_KEY))
         if (Settings.System.canWrite(this)) {
             ringnote = RingtoneManager.getRingtone(applicationContext, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
         } else {
@@ -237,10 +244,10 @@ class AssistantActivity : AppCompatActivity() {
                             keeper.contains("play ringtone") -> playRingtone(ringnote, textToSpeech, assistantViewModel, keeper)
                             keeper.contains("stop ringtone") -> stopRingtone(ringnote, textToSpeech, assistantViewModel, keeper)
                             keeper.contains("read me") -> readMe(this@AssistantActivity)
-                            keeper.contains("weather") -> weather(helper, textToSpeech, assistantViewModel, keeper)
-                            keeper.contains("motivate") || keeper.contains("any thoughts") || keeper.contains("motivational thoughts") -> motivationalThoughts(textToSpeech, assistantViewModel, keeper)
+                            keeper.contains("motivate") || keeper.contains("any thoughts") || keeper.contains("motivational thoughts") || keeper.contains("motivational") -> motivationalThoughts(textToSpeech, assistantViewModel, keeper)
                             keeper.contains("joke") -> joke(textToSpeech, assistantViewModel, keeper)
                             keeper.contains("question") -> question(textToSpeech, assistantViewModel, keeper)
+                            keeper.contains("haha") ||   keeper.contains("hehe") -> speak("I know , I am funny", textToSpeech, assistantViewModel, keeper)
                             keeper.contains("Are you married") -> speak("Yes to my work !", textToSpeech, assistantViewModel, keeper)
                             keeper.contains("boat") || keeper.contains("real magic")
                                     || keeper.contains("magic") || keeper.contains("useless talent")
@@ -488,6 +495,7 @@ class AssistantActivity : AppCompatActivity() {
         speechRecognizer.destroy()
         Log.i(logSR, "destroy")
     }
+
 
 
 

@@ -10,4 +10,7 @@
     <string name="search">Search</string>
     <string name="text_will_appear_here">Text will appear here</string>
     <string name="image_preview">image preview</string>
+    <string name="get_temperature_here">Get temperature here</string>
+    <string name="today">Today</string>
+    <string name="add_image">Add Image</string>
 </resources>
