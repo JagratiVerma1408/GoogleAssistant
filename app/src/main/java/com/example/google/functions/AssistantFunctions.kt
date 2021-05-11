@@ -1,9 +1,7 @@
 package com.example.google.functions
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Dialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.ClipData
@@ -14,7 +12,6 @@ import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.hardware.camera2.CameraManager
-import android.location.Location
 import android.media.Ringtone
 import android.net.Uri
 import android.os.Build
@@ -26,36 +23,16 @@ import android.provider.Telephony
 import android.speech.tts.TextToSpeech
 import android.telephony.SmsManager
 import android.util.Log
-import android.view.View
-import android.view.Window
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import bot.box.horology.annotation.DURATION
-import bot.box.horology.annotation.SUNSIGN
-import bot.box.horology.api.Horoscope
-import bot.box.horology.delegate.Response
-import bot.box.horology.hanshake.HorologyController
-import bot.box.horology.pojo.Zodiac
-import com.android.volley.Request
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
-import com.example.google.R
 import com.example.google.assistant.AssistantViewModel
 import com.example.google.utils.UiUtils.logKeeper
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
-import com.kwabenaberko.openweathermaplib.constant.Units
-import com.kwabenaberko.openweathermaplib.implementation.OpenWeatherMapHelper
-import com.kwabenaberko.openweathermaplib.implementation.callback.CurrentWeatherCallback
-import com.kwabenaberko.openweathermaplib.model.currentweather.CurrentWeather
 import com.ml.quaterion.text2summary.Text2Summary
 import com.theartofdev.edmodo.cropper.CropImage
-import org.json.JSONObject
 import java.io.File
 import java.io.IOException
 import java.text.DateFormat
@@ -189,7 +166,7 @@ class AssistantFunctions {
         }
 
 
-        fun shareATextMessage(activity: Activity, context: Context, keeper: String) {
+        fun shareATextMessage(activity: Activity, context: Context, textToSpeech: TextToSpeech, assistantViewModel: AssistantViewModel, keeper: String) {
             if (ContextCompat.checkSelfPermission(
                             context, Manifest.permission.READ_EXTERNAL_STORAGE
                     ) != PERMISSION_GRANTED) {
@@ -199,13 +176,20 @@ class AssistantFunctions {
                         SHAREATEXTFILE
                 )
             } else {
-                val builder = StrictMode.VmPolicy.Builder()
-                StrictMode.setVmPolicy(builder.build())
-                val message = keeper.split("that").toTypedArray()[1]
-                val intentShare = Intent(Intent.ACTION_SEND)
-                intentShare.type = "text/plain"
-                intentShare.putExtra(Intent.EXTRA_TEXT, message)
-                activity.startActivity(Intent.createChooser(intentShare, "Sharing Text"))
+               try {
+                   val builder = StrictMode.VmPolicy.Builder()
+                   StrictMode.setVmPolicy(builder.build())
+                   val message = keeper.split("that").toTypedArray()[1]
+                   val intentShare = Intent(Intent.ACTION_SEND)
+                   intentShare.type = "text/plain"
+                   intentShare.putExtra(Intent.EXTRA_TEXT, message)
+                   activity.startActivity(Intent.createChooser(intentShare, "Sharing Text"))
+               }
+                catch (e: Exception) {
+                    e.printStackTrace()
+                    Log.d("error in sms", e.message.toString())
+                    speak("Something went wrong", textToSpeech, assistantViewModel, keeper)
+                }
             }
         }
 
@@ -220,23 +204,28 @@ class AssistantFunctions {
                 )
                 Log.d(logKeeper, "sending sms")
             } else {
-                Log.d(logKeeper, "permission are already given")
-                val keeperReplaced = keeper.replace(" ".toRegex(), "")
-                val number = keeperReplaced.split("o")
-                        .toTypedArray()[1].split("t").toTypedArray()[0]
-                val message = keeper.split("that").toTypedArray()[1]
-                Log.d("check", "sms : $message , number : $number")
-                val mySmsManager = SmsManager.getDefault()
-                mySmsManager.sendTextMessage(
-                        number.trim { it <= ' ' },
-                        null,
-                        message.trim { it <= ' ' },
-                        null,
-                        null
-                )
-                speak("Message has been Send and the message send was $message to $number", textToSpeech, assistantViewModel, keeper)
+                try {
+                    Log.d(logKeeper, "permission are already given")
+                    val keeperReplaced = keeper.replace(" ".toRegex(), "")
+                    val number = keeperReplaced.split("o")
+                            .toTypedArray()[1].split("t").toTypedArray()[0]
+                    val message = keeper.split("that").toTypedArray()[1]
+                    Log.d("check", "sms : $message , number : $number")
+                    val mySmsManager = SmsManager.getDefault()
+                    mySmsManager.sendTextMessage(
+                            number.trim { it <= ' ' },
+                            null,
+                            message.trim { it <= ' ' },
+                            null,
+                            null
+                    )
+                    speak("Message has been Send and the message send was $message to $number", textToSpeech, assistantViewModel, keeper)
+                } catch (e: Exception) {
+                e.printStackTrace()
+                Log.d("error in sms", e.message.toString())
+                speak("Something went wrong", textToSpeech, assistantViewModel, keeper)
             }
-
+        }
         }
 
         fun makeAPhoneCall(activity: Activity, context: Context, textToSpeech: TextToSpeech, assistantViewModel: AssistantViewModel, keeper: String) {
@@ -261,12 +250,18 @@ class AssistantFunctions {
 
                 }
             } else {
-                Toast.makeText(context, "Enter Phone Number", Toast.LENGTH_LONG).show()
+                speak("Dial Correct Phone Number", textToSpeech, assistantViewModel, keeper)
             }
+        }
+        fun search(activity: Activity, keeper: String)
+        {
+            val uri = Uri.parse("https://www.google.com/search?q=$keeper")
+            val gSearchIntent = Intent(Intent.ACTION_VIEW, uri)
+            activity.startActivity(gSearchIntent)
         }
 
         fun callContact(activity: Activity, textToSpeech: TextToSpeech, assistantViewModel: AssistantViewModel, keeper: String) {
-            var number: String = ""
+            var number= ""
             if (ContextCompat.checkSelfPermission(
                             activity, Manifest.permission.READ_CONTACTS
                     ) != PERMISSION_GRANTED) {
@@ -283,8 +278,9 @@ class AssistantFunctions {
                 try {
                     val phones: Cursor = activity.contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null)!!
                     while (phones.moveToNext()) {
-                        val contactName: String = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
-                        if (contactName == name) {
+                        var contactName: String = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+                        contactName=contactName.toLowerCase()
+                        if (contactName.contains(name.toLowerCase())) {
                             number = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
                             Log.d("number", number)
                         }
@@ -305,7 +301,7 @@ class AssistantFunctions {
 
                         }
                     } else {
-                        Toast.makeText(activity, "Enter Phone Number", Toast.LENGTH_LONG).show()
+                        speak("Wrong Contact Name", textToSpeech, assistantViewModel, keeper)
                     }
 
                 } catch (e: Exception) {
@@ -435,12 +431,12 @@ class AssistantFunctions {
         }
 
         fun playRingtone(ringtone: Ringtone, textToSpeech: TextToSpeech, assistantViewModel: AssistantViewModel, keeper: String) {
-            speak("Playing Ringtone", textToSpeech, assistantViewModel, keeper)
+            speak("Playing", textToSpeech, assistantViewModel, keeper)
             ringtone.play()
         }
 
         fun stopRingtone(ringtone: Ringtone, textToSpeech: TextToSpeech, assistantViewModel: AssistantViewModel, keeper: String) {
-            speak(" Ringtone Stopped", textToSpeech, assistantViewModel, keeper)
+            speak("Stopped", textToSpeech, assistantViewModel, keeper)
             ringtone.stop()
         }
 
@@ -476,22 +472,22 @@ class AssistantFunctions {
 
 
 
-        fun motivationalThoughts( textToSpeech: TextToSpeech, assistantViewModel: AssistantViewModel, keeper: String) {
+        fun motivationalThoughts(textToSpeech: TextToSpeech, assistantViewModel: AssistantViewModel, keeper: String) {
 
-            val horoscopes: List<String> = listOf<String>("If you want to achieve greatness stop asking for permission." ,
+            val horoscopes: List<String> = listOf<String>("If you want to achieve greatness stop asking for permission.",
                     "Things work out best for those who make the best of how things work out.",
-                     "To live a creative life, we must lose our fear of being wrong." ,
-                    "If you are not willing to risk the usual you will have to settle for the ordinary." ,
+                    "To live a creative life, we must lose our fear of being wrong.",
+                    "If you are not willing to risk the usual you will have to settle for the ordinary.",
                     "Trust because you are willing to accept the risk, not because it's safe or certain.",
                     "Take up one idea. Make that one idea your life--think of it, dream of it, live on that idea. Let the brain, muscles, " +
                             "nerves, every part of your body, be full of that idea, and just leave" +
-                            " every other idea alone. This is the way to success." ,
-                    "All our dreams can come true if we have the courage to pursue them." ,
-                    "Good things come to people who wait, but better things come to those who go out and get them." ,
+                            " every other idea alone. This is the way to success.",
+                    "All our dreams can come true if we have the courage to pursue them.",
+                    "Good things come to people who wait, but better things come to those who go out and get them.",
                     "If you do what you always did, you will get what you always got.",
-                    "Success is walking from failure to failure with no loss of enthusiasm." ,
-                     "Just when the caterpillar thought the world was ending, he turned into a butterfly." )
-            val indexes: List<Int> = listOf(0, 1, 2,3,4,5,6,7,8,9,10)
+                    "Success is walking from failure to failure with no loss of enthusiasm.",
+                    "Just when the caterpillar thought the world was ending, he turned into a butterfly.")
+            val indexes: List<Int> = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
             val index = indexes.random()
             speak(horoscopes[index], textToSpeech, assistantViewModel, keeper)
         }

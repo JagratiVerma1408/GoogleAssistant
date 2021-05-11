@@ -71,6 +71,7 @@ import com.example.google.functions.AssistantFunctions.Companion.playRingtone
 import com.example.google.functions.AssistantFunctions.Companion.question
 import com.example.google.functions.AssistantFunctions.Companion.readMe
 import com.example.google.functions.AssistantFunctions.Companion.readSMS
+import com.example.google.functions.AssistantFunctions.Companion.search
 import com.example.google.functions.AssistantFunctions.Companion.sendSMS
 import com.example.google.functions.AssistantFunctions.Companion.shareAFile
 import com.example.google.functions.AssistantFunctions.Companion.shareATextMessage
@@ -80,6 +81,7 @@ import com.example.google.functions.AssistantFunctions.Companion.turnOffBluetoot
 import com.example.google.functions.AssistantFunctions.Companion.turnOffFlash
 import com.example.google.functions.AssistantFunctions.Companion.turnOnBluetooth
 import com.example.google.functions.AssistantFunctions.Companion.turnOnFlash
+import com.example.google.functions.GoogleLensActivity
 
 import com.example.google.utils.UiUtils.*
 import com.kwabenaberko.openweathermaplib.implementation.OpenWeatherMapHelper
@@ -216,49 +218,58 @@ class AssistantActivity : AppCompatActivity() {
                         Log.d(logKeeper, keeper)
                         when {
                             keeper.contains("thanks") -> speak("Its my job , let me know if there is something else", textToSpeech, assistantViewModel, keeper)
+                            keeper.contains("search") -> search(this@AssistantActivity,keeper)
                             keeper.contains("welcome") -> speak("Its my pleasure to help you out", textToSpeech, assistantViewModel, keeper)
-                            keeper.contains("clear") -> assistantViewModel.onClear()
+                            keeper.contains("go out with me") ||  keeper.contains("club") ||  keeper.contains("coffee") ||  keeper.contains("dance") ||  keeper.contains("love")  ||  keeper.contains("ok") -> speak("Yes , Ofcourse", textToSpeech, assistantViewModel, keeper)
+                            keeper.contains("clear") ||  keeper.contains("delete")-> assistantViewModel.onClear()
                             keeper.contains("date") -> getDate(textToSpeech, assistantViewModel, keeper)
                             keeper.contains("time") -> getTime(textToSpeech, assistantViewModel, keeper)
                             keeper.contains("dial") -> makeAPhoneCall(this@AssistantActivity, applicationContext, textToSpeech, assistantViewModel, keeper)
                             keeper.contains("send sms") || keeper.contains("send SMS") -> sendSMS(this@AssistantActivity, applicationContext, textToSpeech, assistantViewModel, keeper)
-                            keeper.contains("read my last sms") || keeper.contains("read my last SMS") -> readSMS(this@AssistantActivity, applicationContext, textToSpeech, assistantViewModel, keeper)
-                            keeper.contains("open Gmail") -> openGmail(this@AssistantActivity)
-                            keeper.contains("open Maps") || keeper.contains("open maps") -> openMaps(this@AssistantActivity)
+                            keeper.contains("read my last sms") || keeper.contains("read my last SMS") || keeper.contains("read my SMS") -> readSMS(this@AssistantActivity, applicationContext, textToSpeech, assistantViewModel, keeper)
+                            keeper.contains("open Gmail") || keeper.contains("Gmail") ||keeper.contains("gmail") ||keeper.contains("mail") -> openGmail(this@AssistantActivity)
+                            keeper.contains("open Maps") || keeper.contains("open maps")  || keeper.contains("maps")-> openMaps(this@AssistantActivity)
                             keeper.contains("open Google") || keeper.contains("open Google") || keeper.contains("open Chrome") -> openGoogle(this@AssistantActivity)
                             keeper.contains("open Whatsapp") || keeper.contains("open WhatsApp") -> openWhatsAPP(this@AssistantActivity)
                             keeper.contains("open facebook") || keeper.contains("open Facebook") || keeper.contains("open Face") || keeper.contains("open Facebook") -> openFacebook(this@AssistantActivity)
                             keeper.contains("open messages") -> openMessages(this@AssistantActivity, applicationContext)
+                            keeper.contains("how to use google assistant") || keeper.contains("google assistant") || keeper.contains("how to use") || keeper.contains("can I do") || keeper.contains("what can I do") || keeper.contains("Google assistant") || keeper.contains("can")-> speak("Try some Commands : open whatsapp , open facebook , tell me a joke , hi , hello , explore , google lens", textToSpeech, assistantViewModel, keeper)
                             keeper.contains("open youtube") || keeper.contains("open YouTube") -> openYoutube(this@AssistantActivity)
                             keeper.contains("share file") -> shareAFile(this@AssistantActivity, applicationContext)
-                            keeper.contains("share a text message") -> shareATextMessage(this@AssistantActivity, applicationContext, keeper)
+                            keeper.contains("share a text message") -> shareATextMessage(this@AssistantActivity, applicationContext, textToSpeech, assistantViewModel, keeper)
                             keeper.contains("call") -> callContact(this@AssistantActivity, textToSpeech, assistantViewModel, keeper)
                             keeper.contains("turn on bluetooth") || keeper.contains("turn on Bluetooth") -> turnOnBluetooth(this@AssistantActivity, textToSpeech, assistantViewModel, keeper)
                             keeper.contains("turn off bluetooth") || keeper.contains("turn off Bluetooth") -> turnOffBluetooth(textToSpeech, assistantViewModel, keeper)
                             keeper.contains("get bluetooth devices") -> getAllPairedDevices(textToSpeech, assistantViewModel, keeper)
                             keeper.contains("turn on flash") -> turnOnFlash(cameraManager, cameraID, textToSpeech, assistantViewModel, keeper)
                             keeper.contains("turn off flash") -> turnOffFlash(cameraManager, cameraID, textToSpeech, assistantViewModel, keeper)
-                            keeper.contains("copy to clipboard") -> clipBoardCopy(clipboardManager, textToSpeech, assistantViewModel, keeper)
-                            keeper.contains("read last clipboard") -> clipBoardSpeak(clipboardManager, textToSpeech, assistantViewModel, keeper)
+                            keeper.contains("copy to clipboard") ||   keeper.contains("copy") -> clipBoardCopy(clipboardManager, textToSpeech, assistantViewModel, keeper)
+                            keeper.contains("read last clipboard")|| keeper.contains("read my clipboard")|| keeper.contains("read clipboard")-> clipBoardSpeak(clipboardManager, textToSpeech, assistantViewModel, keeper)
                             keeper.contains("capture photo") -> capturePhoto(this@AssistantActivity, applicationContext, textToSpeech, assistantViewModel, keeper)
-                            keeper.contains("play ringtone") -> playRingtone(ringnote, textToSpeech, assistantViewModel, keeper)
-                            keeper.contains("stop ringtone") -> stopRingtone(ringnote, textToSpeech, assistantViewModel, keeper)
+                            keeper.contains("play ringtone") ||  keeper.contains("play something") ||  keeper.contains("play")||  keeper.contains("song")-> playRingtone(ringnote, textToSpeech, assistantViewModel, keeper)
+                            keeper.contains("stop ringtone") || keeper.contains("stop playing") || keeper.contains("stop music") || keeper.contains("stop") || keeper.contains("sto") -> stopRingtone(ringnote, textToSpeech, assistantViewModel, keeper)
                             keeper.contains("read me") -> readMe(this@AssistantActivity)
+                            keeper.contains("weather") ||
+                                    keeper.contains("explore")||
+                                    keeper.contains("Explore")||
+                                    keeper.contains("Commands")||
+                                    keeper.contains("commands")-> startActivity(Intent(this@AssistantActivity, ExploreActivity::class.java))
+                            keeper.contains("lens")||keeper.contains("Lens")||keeper.contains("len")-> startActivity(Intent(this@AssistantActivity, GoogleLensActivity::class.java))
                             keeper.contains("motivate") || keeper.contains("any thoughts") || keeper.contains("motivational thoughts") || keeper.contains("motivational") -> motivationalThoughts(textToSpeech, assistantViewModel, keeper)
                             keeper.contains("joke") -> joke(textToSpeech, assistantViewModel, keeper)
                             keeper.contains("question") -> question(textToSpeech, assistantViewModel, keeper)
-                            keeper.contains("haha") ||   keeper.contains("hehe") -> speak("I know , I am funny", textToSpeech, assistantViewModel, keeper)
-                            keeper.contains("Are you married") -> speak("Yes to my work !", textToSpeech, assistantViewModel, keeper)
+                            keeper.contains("haha") || keeper.contains("hehe") -> speak("I know , I am funny", textToSpeech, assistantViewModel, keeper)
+                            keeper.contains("are you married") ||   keeper.contains("married") ||   keeper.contains("marry") -> speak("Yes to my work !", textToSpeech, assistantViewModel, keeper)
                             keeper.contains("boat") || keeper.contains("real magic")
                                     || keeper.contains("magic") || keeper.contains("useless talent")
                                     || keeper.contains("smelling place") || keeper.contains("smelling ") ->
                                 speak("You are funny haha", textToSpeech, assistantViewModel, keeper)
-                            keeper.contains("what is your name") || keeper.contains("vane you please tell me your name")
+                            keeper.contains("what is your name") || keeper.contains("your name")
                                     || keeper.contains("what do you call your self") ->
                                 speak("I am Google Assistant at  your service", textToSpeech, assistantViewModel, keeper)
                             keeper.contains("hello") || keeper.contains("hi") || keeper.contains("hey") || keeper.contains("hay")
                             -> speak("Hello , how can I help you ?", textToSpeech, assistantViewModel, keeper)
-                            else -> speak("Please try another comment", textToSpeech, assistantViewModel, keeper)
+                            else -> speak("Please try another comment like  what is your name , call someone , read my sms , open google lens , explore", textToSpeech, assistantViewModel, keeper)
 
                         }
 
@@ -290,163 +301,142 @@ class AssistantActivity : AppCompatActivity() {
                 false
 
             }
-           checkSpeechRecognizerAvailable()
+            checkSpeechRecognizerAvailable()
         }
 
     }
 
 
-     private fun checkSpeechRecognizerAvailable() {
-        if (SpeechRecognizer.isRecognitionAvailable(this))
-        {
+    private fun checkSpeechRecognizerAvailable() {
+        if (SpeechRecognizer.isRecognitionAvailable(this)) {
             Log.d(logSR, "yes")
-        }
-        else{
+        } else {
             Log.d(logSR, "false")
         }
 
     }
 
-     @RequiresApi(Build.VERSION_CODES.O)
-     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-         if (requestCode== REQUEST_CALL){
-             if (grantResults.isNotEmpty() && grantResults[0]==PERMISSION_GRANTED)
-             {
-                 makeAPhoneCall(this, applicationContext, textToSpeech, assistantViewModel, keeper)
-             }
-             else{
-                 Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
-             }
-         }
-         else if (requestCode== READSMS){
-             if (grantResults.isNotEmpty() && grantResults[0]==PERMISSION_GRANTED)
-             {
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CALL) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PERMISSION_GRANTED) {
+                makeAPhoneCall(this, applicationContext, textToSpeech, assistantViewModel, keeper)
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        } else if (requestCode == READSMS) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PERMISSION_GRANTED) {
                 readSMS(this, applicationContext, textToSpeech, assistantViewModel, keeper)
-             }
-             else{
-                 Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
-             }
-         }
-         else if (requestCode== SHAREAFILE){
-             if (grantResults.isNotEmpty() && grantResults[0]==PERMISSION_GRANTED)
-             {
-               shareAFile(this, applicationContext)
-             }
-             else{
-                 Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
-             }
-         }
-        else  if (requestCode== SHAREATEXTFILE){
-             if (grantResults.isNotEmpty() && grantResults[0]==PERMISSION_GRANTED)
-             {
-                 shareATextMessage(this, applicationContext, keeper)
-             }
-             else{
-                 Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
-             }
-         }
-         else  if (requestCode== READCONTACTS){
-             if (grantResults.isNotEmpty() && grantResults[0]==PERMISSION_GRANTED)
-             {
-                 callContact(this, textToSpeech, assistantViewModel, keeper)
-             }
-             else{
-                 Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
-             }
-         }
-         else  if (requestCode== CAPTUREPHOTO){
-             if (grantResults.isNotEmpty() && grantResults[0]==PERMISSION_GRANTED)
-             {
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        } else if (requestCode == SHAREAFILE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PERMISSION_GRANTED) {
+                shareAFile(this, applicationContext)
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        } else if (requestCode == SHAREATEXTFILE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PERMISSION_GRANTED) {
+                shareATextMessage(this, applicationContext, textToSpeech, assistantViewModel, keeper)
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        } else if (requestCode == READCONTACTS) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PERMISSION_GRANTED) {
+                callContact(this, textToSpeech, assistantViewModel, keeper)
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        } else if (requestCode == CAPTUREPHOTO) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PERMISSION_GRANTED) {
                 capturePhoto(this, applicationContext, textToSpeech, assistantViewModel, keeper)
-             }
-             else{
-                 Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
-             }
-         }
-     }
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
-     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-         super.onActivityResult(requestCode, resultCode, data)
-         if (requestCode== REQUEST_CODE_SELECT_DOC && resultCode== RESULT_OK)
-         {
-             val filePath = data !!.data!!.path
-             Log.d("check", "path: $filePath")
-             val file = File(filePath)
-             val intentShare = Intent(Intent.ACTION_SEND)
-             intentShare.type="application/pdf"
-             intentShare.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://$file"))
-             startActivity(Intent.createChooser(intentShare, "Share the file"))
-         }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_SELECT_DOC && resultCode == RESULT_OK) {
+            val filePath = data!!.data!!.path
+            Log.d("check", "path: $filePath")
+            val file = File(filePath)
+            val intentShare = Intent(Intent.ACTION_SEND)
+            intentShare.type = "application/pdf"
+            intentShare.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://$file"))
+            startActivity(Intent.createChooser(intentShare, "Share the file"))
+        }
 
-         if (requestCode== REQUEST_ENABLE_BT ){
-             if ( resultCode== RESULT_OK)
-             {
-                 speak("Bluetooth is On", textToSpeech, assistantViewModel, keeper)
-             }
-             else{
-                 speak("could not able turn on Bluetooth ", textToSpeech, assistantViewModel, keeper)
-             }
+        if (requestCode == REQUEST_ENABLE_BT) {
+            if (resultCode == RESULT_OK) {
+                speak("Bluetooth is On", textToSpeech, assistantViewModel, keeper)
+            } else {
+                speak("could not able turn on Bluetooth ", textToSpeech, assistantViewModel, keeper)
+            }
 
-         }
-         if (requestCode==CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode== RESULT_OK){
+        }
+        if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == RESULT_OK) {
             val imageUri = CropImage.getPickImageResultUri(this, data)
-           imageuri=imageUri
-             startCrop(imageUri)
+            imageuri = imageUri
+            startCrop(imageUri)
 
-         }
-         if (requestCode==CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE ){
-             val result : CropImage.ActivityResult = CropImage.getActivityResult(data)
-             if (resultCode== RESULT_OK){
-                 imageuri=result.uri
-                 try{
-                     val inputStream = contentResolver.openInputStream(imageuri)
-                     val bitmap= BitmapFactory.decodeStream(inputStream)
-                     getTextFromBitmap(this, bitmap, textToSpeech, assistantViewModel, keeper)
+        }
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result: CropImage.ActivityResult = CropImage.getActivityResult(data)
+            if (resultCode == RESULT_OK) {
+                imageuri = result.uri
+                try {
+                    val inputStream = contentResolver.openInputStream(imageuri)
+                    val bitmap = BitmapFactory.decodeStream(inputStream)
+                    getTextFromBitmap(this, bitmap, textToSpeech, assistantViewModel, keeper)
 
-                 }
-                 catch (e: FileNotFoundException){
-                     e.printStackTrace()
-                 }
-             }
-             Toast.makeText(this, "Image Captured Successfully", Toast.LENGTH_SHORT).show()
+                } catch (e: FileNotFoundException) {
+                    e.printStackTrace()
+                }
+            }
+            Toast.makeText(this, "Image Captured Successfully", Toast.LENGTH_SHORT).show()
 
-         }
-     }
-     private fun startCrop(imageUri: Uri){
+        }
+    }
 
-         CropImage.activity(imageUri).setGuidelines(CropImageView.Guidelines.ON).setMultiTouchEnabled(true)
-                 .start(this)
+    private fun startCrop(imageUri: Uri) {
 
-     }
-     private fun circularRevealActivity(){
-         val cx : Int = binding.assistantConstraintLayout.right-getDips(Dips)
-         val cy : Int = binding.assistantConstraintLayout.bottom-getDips(Dips)
-         val finalRadius : Int = Math.max(
-                 binding.assistantConstraintLayout.width,
-                 binding.assistantConstraintLayout.height
-         )
-         val circularReveal=ViewAnimationUtils.createCircularReveal(
-                 binding.assistantConstraintLayout,
-                 cx,
-                 cy,
-                 0f,
-                 finalRadius.toFloat()
-         )
-         circularReveal.duration= Animation_TIME.toLong()
-         binding.assistantConstraintLayout.visibility=View.VISIBLE
-         circularReveal.start()
-     }
+        CropImage.activity(imageUri).setGuidelines(CropImageView.Guidelines.ON).setMultiTouchEnabled(true)
+                .start(this)
 
-     private fun getDips(i: Int): Int{
-         val resources : Resources = resources
-         return TypedValue.applyDimension(
-                 TypedValue.COMPLEX_UNIT_DIP,
-                 i.toFloat(),
-                 resources.displayMetrics
-         ).toInt()
+    }
 
-     }
+    private fun circularRevealActivity() {
+        val cx: Int = binding.assistantConstraintLayout.right - getDips(Dips)
+        val cy: Int = binding.assistantConstraintLayout.bottom - getDips(Dips)
+        val finalRadius: Int = Math.max(
+                binding.assistantConstraintLayout.width,
+                binding.assistantConstraintLayout.height
+        )
+        val circularReveal = ViewAnimationUtils.createCircularReveal(
+                binding.assistantConstraintLayout,
+                cx,
+                cy,
+                0f,
+                finalRadius.toFloat()
+        )
+        circularReveal.duration = Animation_TIME.toLong()
+        binding.assistantConstraintLayout.visibility = View.VISIBLE
+        circularReveal.start()
+    }
+
+    private fun getDips(i: Int): Int {
+        val resources: Resources = resources
+        return TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                i.toFloat(),
+                resources.displayMetrics
+        ).toInt()
+
+    }
 
     override fun onBackPressed() {
         super.onBackPressed()
@@ -483,7 +473,7 @@ class AssistantActivity : AppCompatActivity() {
 
 
         } else {
-          super.onBackPressed()
+            super.onBackPressed()
         }
     }
 
@@ -495,10 +485,6 @@ class AssistantActivity : AppCompatActivity() {
         speechRecognizer.destroy()
         Log.i(logSR, "destroy")
     }
-
-
-
-
 
 
 }

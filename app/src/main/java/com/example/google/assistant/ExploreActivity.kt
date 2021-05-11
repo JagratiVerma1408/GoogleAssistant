@@ -1,6 +1,7 @@
 package com.example.google.assistant
 
 import android.Manifest
+import android.app.AlertDialog.THEME_HOLO_LIGHT
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -88,11 +89,12 @@ class ExploreActivity : AppCompatActivity() {
             // Alert user to switch Location on in Settings
             val builder = AlertDialog.Builder(this)
 
+
             // Set the alert dialog title
             builder.setTitle("Turn on \"Location\"")
 
             // Display a message on alert dialog
-            builder.setMessage("\"Location\" is currently turned off. Turn on \"Location\" to enable navigation function in Googleass")
+            builder.setMessage("\"Location\" is currently turned off. Turn on \"Location\" to enable navigation function in GoogleAssistant")
 
             // Set a positive button and its click listener on alert dialog
             builder.setPositiveButton("OK") { dialog, which ->
@@ -110,7 +112,7 @@ class ExploreActivity : AppCompatActivity() {
 
             // Finally, make the alert dialog using builder
             val dialog: AlertDialog = builder.create()
-
+            dialog.window?.setBackgroundDrawableResource(android.R.color.darker_gray);
             // Display the alert dialog on app interface
             dialog.show()
         }
