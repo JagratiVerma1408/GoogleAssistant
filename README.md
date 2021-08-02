@@ -9,9 +9,9 @@ The Voice assistant interacts with the humans to perform basic tasks.
 <h2> Main Features</h2>
 
 * Google Lens using Google Vision Text-Recognizer Library
-* Weather show cast using Rest Api.
+* Weather show cast using Rest API.
 * Voice assistant using Text-to-Speech and Speech Recognizer.
-* Functionalities like Connections , Calls , Sms  and many more.
+* Functionalities like Connections,Calls,Sms and many more.
 
  ## Screenshots
 <h3> Voice Assistant</h3>
